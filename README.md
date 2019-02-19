@@ -26,7 +26,7 @@ Le code source des bots et des générateurs de l'[OuGéPro](https://www.cafedef
 
 Ainsi que du **Lacanotron** et du **Vocifératron**
 
-##ATTENTION##
+## ATTENTION
 
 Ce code est fourni en l'état, ni très optimisé ni très commenté.
 Faites de lui ce que voudrez, et amusez-vous bien !
