@@ -1,6 +1,6 @@
 # OuGéPro
 
-Le code source des bots et des générateurs de l'[OuGéPro](https://www.cafedefaune.org/#ougepro) (Ouvroir de Génération Procédurale), collection d'outils permettant la génération de textes absurdes et de créations insensées, publié à l'origine sur mon site [Café de Faune](https://www.cafedefaune.org/)
+Le code source des bots et des générateurs de l'[OuGéPro](https://www.cafedefaune.org/#ougepro) (Ouvroir de Génération Procédurale), collection d'outils permettant la génération de textes absurdes et de créations insensées, publié à l'origine sur mon site [Café de Faune](https://www.cafedefaune.org/).
 
 ## Vous trouverez le code source des bots Twitter suivants
 * @AlexandrinsBot
