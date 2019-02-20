@@ -28,8 +28,8 @@ Ainsi que du **Lacanotron** et du **Vocifératron**
 
 ## ATTENTION
 
-Ce code est fourni en l'état, et pas particulièrement commenté.\s\s
-Faites de lui ce que voudrez.\s\s
+Ce code est fourni en l'état, et pas particulièrement commenté.  
+Faites de lui ce que voudrez.  
 Amusez-vous bien !
 
 **Distribué sous licence GPL 3.0**
