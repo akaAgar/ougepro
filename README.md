@@ -16,6 +16,7 @@ Le code source des bots et des générateurs de l'[OuGéPro](https://www.cafedef
 * @HasArtBot
 * @JeMetsLeBot
 * @L_Aleatheque
+* @LeCandidatron
 * @LeCuisinotron
 * @LeDoutotron
 * @LePhilotron
