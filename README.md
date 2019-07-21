@@ -21,6 +21,7 @@ Le code source des bots et des générateurs de l'[OuGéPro](https://www.cafedef
 * @LeDoutotron
 * @LePhilotron
 * @LeProverbotron
+* @LeSloganotron
 * @NicolasNamnese
 * @NiemollerBot
 * @VidalGoreBot
