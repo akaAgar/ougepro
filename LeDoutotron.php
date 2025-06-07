@@ -1,85 +1,71 @@
 <?php
 
-class Doutotron
+$xml = file_get_contents('https://www.lemonde.fr/rss/une.xml');
+
+$parser = xml_parser_create();
+xml_parse_into_struct($parser, $xml, $vals, $index);
+xml_parser_free($parser);
+
+$first = true;
+$totalCount = 0;
+$fullText = "";
+
+foreach($vals as $val)
 {
- private function addRandomQuotes($text, $oneOutOf, $newsIndex)
-{
- $MINWORDLENGTH = 5;
+	if (!isset($val["tag"])) continue;
+	if ($val["tag"] !== "TITLE") continue;
 
- $text = str_replace("''", "", $text);
- $text = str_replace('"', '', $text);
- $text = str_replace('.', ' .', $text);
- $text = str_replace(',', ' ,', $text);
- $text = str_replace('«', '', $text);
- $text = str_replace('»', '', $text);
- $text = str_replace('»', '', $text);
- $words = explode(' ', $text);
+	if ($first === true)
+	{
+		$first = false;
+		continue;
+	}
 
- $wordIndex = 0;
- for ($i=0; $i < count($words); $i++)
- {
-  $words[$i] = trim($words[$i], " '");
 
-  if ((strpos($words[$i],'(') >= 0) && (strpos($words[$i],')')  >= 0))
-  {
-    $words[$i]= str_replace('(', '', $words[$i]);
-    $words[$i]= str_replace(')', '', $words[$i]);
-  }
+	$text = $val["value"];
+	$text = str_replace("\xc2\xa0", " ", $text);
+	$text = str_replace("« ", "", $text);
+	$text = str_replace(" »", "", $text);
+	$words = explode(" ", $text);
 
-  if ((strlen($words[$i]) >= $MINWORDLENGTH) && ($words[$i] == 0) &&
-    (!ctype_upper (substr($words[$i], 0, 1))))
-  {
-   if (($wordIndex % $oneOutOf) == 1) { $words[$i] = '« '.$words[$i].' »'; }
-   $wordIndex++;
-  }
- }
+	$indices = [];
+	for ($i = 0; $i < count($words); $i++)
+	{
+		if (strlen($words[$i]) < 4) continue;
+		if (ctype_upper(mb_substr($words[$i], 0, 1))) continue;
+		if (str_contains($words[$i], ":")) continue;
+		if (str_contains($words[$i], ";")) continue;
+		if (str_contains($words[$i], "\"")) continue;
+		if (str_contains($words[$i], "«")) continue;
+		if (str_contains($words[$i], "»")) continue;
+		if (str_contains($words[$i], "’")) continue;
+		if (str_contains($words[$i], "'")) continue;
+		if (str_contains($words[$i], ",")) continue;
 
- $text = implode(' ', $words);
+		array_push($indices, $i);
+	}
+	
+	if (count($indices) === 0) continue;
 
- $text = str_replace(' .', '.', $text);
- $text = str_replace(' ,', ',', $text);
- return $text;
+	$seed = strlen($val["value"]);
+
+	mt_srand($seed);
+	$count = mt_rand(1, 3);
+	for ($i = 0; $i < $count; $i++)
+	{
+		if (count($indices) === 0) break;
+		
+		$index = array_splice($indices, mt_rand(0, count($indices) - 1), 1)[0];
+		$words[$index] = "«\xc2\xa0".$words[$index]."\xc2\xa0»";
+		// $words[$index] = "\"".$words[$index]."\"";
+	}
+
+	$text = implode(" ", $words);
+	$fullText .= "<li>".$text."</li>";
+	$totalCount++;
+	if ($totalCount >= 5) break;
 }
 
-public function genererDoutotron($quantite = 1)
-{
- $titres = array();
- $details = array();
-
-// Récupération des news
-$fullRssFeed = file_get_contents("http://www.lemonde.fr/rss/une.xml");
-$fullRssFeed = str_replace('&nsbp;', ' ', $fullRssFeed );
-$newsIndex = 0;
-
-for ($nCnt = 0; $nCnt < $quantite; $nCnt++)
-{
- $wordIndex = ($nCnt % 2);
-
-  // On isole la news
-  $start = strpos($fullRssFeed, '<item>', $newsIndex) + 6;
-  $end = strpos($fullRssFeed, '</item>', $newsIndex) + 7;
-
-  $rssFeed = substr($fullRssFeed, $start, $end - $start);
-
-  $newsIndex = $end;
-
-  // On récupère le titre
-  $start = strpos($rssFeed, '<title>') + 7;
-  $end = strpos($rssFeed, '</title>');
-  $title = substr($rssFeed, $start, $end - $start);
-  array_push($titres, $this->addRandomQuotes($title,2,$nCnt));
-
-  // On ajoute le corps du texte
-  $start = strpos($rssFeed, '<description>') + 13;
-  $end = strpos($rssFeed, '</description>');
-  $description = strip_tags(html_entity_decode(substr($rssFeed, $start, $end - $start)));
-
-  array_push($details, $this->addRandomQuotes($description,2,$nCnt));
-}
-
- return array($titres, $details);
-}
-
-}
+echo $fullText;
 
 ?>
